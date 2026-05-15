@@ -46,8 +46,9 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       padding: 1.5rem 4rem;
       display: flex; justify-content: space-between; align-items: center;
-      transition: background 0.4s, backdrop-filter 0.4s, padding 0.4s;
+      transition: background 0.4s, backdrop-filter 0.4s, padding 0.4s, transform 0.35s ease;
     }
+    nav.nav-hidden { transform: translateY(-110%); }
     nav.scrolled {
       background: rgba(13,9,16,0.92);
       backdrop-filter: blur(12px);
@@ -487,10 +488,8 @@
     }
 
     @media (max-width: 768px) {
-      .animation-toggle {
-        padding: 0.45rem 0.9rem;
-        font-size: 0.68rem;
-        order: 2;
+      nav .animation-toggle {
+        display: none;
       }
       nav {
         gap: 0.75rem;
@@ -627,6 +626,25 @@
       -webkit-tap-highlight-color: transparent;
     }
     .nav-overlay a:hover { color: var(--gold); }
+    .nav-overlay .animation-toggle {
+      font-family: inherit;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink-soft);
+      padding: 0.6rem 1.4rem;
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+      margin-top: 0.5rem;
+    }
+    .nav-overlay .animation-toggle.active,
+    .nav-overlay .animation-toggle:hover {
+      background: rgba(155,36,36,0.12);
+      color: var(--gold);
+      border-color: rgba(155,36,36,0.45);
+    }
     .hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
     .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
@@ -853,7 +871,7 @@
     #imprensa .divider { background: #c9a85c; }
 
     @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
+      nav { padding: 1.2rem 1.5rem; max-width: 100vw; overflow: hidden; box-sizing: border-box; }
       nav.scrolled { padding: 0.8rem 1.5rem; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
@@ -914,6 +932,7 @@
     <a href="#presenca" class="overlay-link">Presença</a>
     <a href="#galeria" class="overlay-link">Galeria</a>
     <a href="#entrevistas" class="overlay-link">Entrevistas</a>
+    <button class="animation-toggle" type="button" aria-pressed="false" title="Alternar animações">Animações</button>
   </div>
 
   <!-- NAV -->
@@ -1655,12 +1674,13 @@
       ? !prefersReducedMotion
       : savedAnimationPref === 'true';
 
-    const animationToggle = document.getElementById('animation-toggle');
+    const animationToggles = document.querySelectorAll('.animation-toggle');
     function updateAnimationToggle() {
-      if (!animationToggle) return;
-      animationToggle.textContent = animationsEnabled ? 'Animações: Ligadas' : 'Animações: Desligadas';
-      animationToggle.classList.toggle('active', animationsEnabled);
-      animationToggle.setAttribute('aria-pressed', String(animationsEnabled));
+      animationToggles.forEach(btn => {
+        btn.textContent = animationsEnabled ? 'Animações: Ligadas' : 'Animações: Desligadas';
+        btn.classList.toggle('active', animationsEnabled);
+        btn.setAttribute('aria-pressed', String(animationsEnabled));
+      });
     }
     function setAnimations(enabled) {
       animationsEnabled = enabled;
@@ -1668,10 +1688,10 @@
       updateAnimationToggle();
       window.location.reload();
     }
-    if (animationToggle) {
-      animationToggle.addEventListener('click', () => setAnimations(!animationsEnabled));
-      updateAnimationToggle();
-    }
+    animationToggles.forEach(btn => {
+      btn.addEventListener('click', () => setAnimations(!animationsEnabled));
+    });
+    updateAnimationToggle();
 
     document.body.classList.toggle('no-animations', !animationsEnabled);
 
@@ -1692,10 +1712,17 @@
     const navEl       = document.getElementById('navbar');
     const progressBar = document.getElementById('progress-bar');
     const backToTop   = document.getElementById('back-to-top');
+    let lastScroll    = 0;
     lenis.on('scroll', ({ scroll, limit }) => {
       navEl.classList.toggle('scrolled', scroll > 60);
       progressBar.style.width = (scroll / limit * 100) + '%';
       backToTop.classList.toggle('visible', scroll > 500);
+      if (scroll > 120) {
+        navEl.classList.toggle('nav-hidden', scroll > lastScroll);
+      } else {
+        navEl.classList.remove('nav-hidden');
+      }
+      lastScroll = scroll;
     });
     backToTop.addEventListener('click', () => lenis.scrollTo(0, { duration: 1.6 }));
 
@@ -1706,7 +1733,8 @@
       hamburger.addEventListener('click', () => {
         const open = navOverlay.classList.toggle('open');
         hamburger.classList.toggle('active', open);
-        open ? lenis.stop() : lenis.start();
+        if (open) { navEl.classList.remove('nav-hidden'); lenis.stop(); }
+        else { lenis.start(); }
       });
     }
     document.querySelectorAll('a[href^="#"]:not(.overlay-link), .overlay-link').forEach(a => {
