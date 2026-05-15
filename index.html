@@ -474,7 +474,11 @@
       will-change: transform;
     }
     /* overscroll nativo contido — evita o "rubber band" no iOS */
-    body { overscroll-behavior-y: contain; }
+    body {
+      overscroll-behavior-x: contain;
+      overscroll-behavior-y: contain;
+      touch-action: pan-y;
+    }
 
     @media (max-width: 768px) {
       /* remove filtros pesados de imagem no mobile */
