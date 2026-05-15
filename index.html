@@ -1023,6 +1023,24 @@
       </div>
       <div class="timeline-item">
         <div class="tl-content">
+          <div class="tl-year">Grécia</div>
+          <div class="tl-title">Expansão internacional</div>
+          <div class="tl-desc">Após São Paulo, Soraya levou a dança para além do território nacional, apresentando e estudando em festivais e residências na Grécia — aproximando seu trabalho do circuito internacional.</div>
+        </div>
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-empty"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-empty"></div>
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-content">
+          <div class="tl-year">Madrid</div>
+          <div class="tl-title">Flamenco em Madrid</div>
+          <div class="tl-desc">Recentemente cursou flamenco em Madrid, ampliando ainda mais sua paleta de dança e fundindo a sensibilidade espanhola com sua base oriental.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-content">
           <div class="tl-year">Hoje</div>
           <div class="tl-title">Legado vivo</div>
           <div class="tl-desc">Com décadas de estrada, Soraya retornou ao Nordeste para semear o que aprendeu, formando gerações de bailarinas e tornando Alagoas um polo de referência na dança oriental brasileira.</div>
@@ -1588,11 +1606,11 @@
 
     /* ── LENIS + GSAP ── */
     const lenis = new Lenis({
-      duration: 1.35,
+      duration: 0.95,
       easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       smoothTouch: false,   /* scroll nativo no touch — mais fluido */
-      wheelMultiplier: 0.85,
+      wheelMultiplier: 1.05,
       touchMultiplier: 1.8, /* mais responsivo ao dedo */
     });
     lenis.on('scroll', ScrollTrigger.update);
