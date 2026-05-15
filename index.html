@@ -63,19 +63,25 @@
     .nav-logo span { color: var(--gold); }
     .nav-links { display: flex; gap: 2.5rem; list-style: none; margin-left: auto; }
     .animation-toggle {
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--ink-soft);
-      padding: 0.55rem 1rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.25s, color 0.25s, border-color 0.25s;
-      white-space: nowrap;
-      margin-left: 1.5rem;
+      display: none;
+    }
+    @media (min-width: 769px) {
+      .animation-toggle {
+        display: inline-flex;
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ink-soft);
+        padding: 0.55rem 1rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 0.25s, color 0.25s, border-color 0.25s;
+        white-space: nowrap;
+        margin-left: 1.5rem;
+      }
     }
     .animation-toggle:hover,
     .animation-toggle.active {
@@ -488,9 +494,6 @@
     }
 
     @media (max-width: 768px) {
-      nav .animation-toggle {
-        display: none;
-      }
       nav {
         gap: 0.75rem;
       }
@@ -628,25 +631,6 @@
       -webkit-tap-highlight-color: transparent;
     }
     .nav-overlay a:hover { color: var(--gold); }
-    .nav-overlay .animation-toggle {
-      font-family: inherit;
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
-      text-transform: uppercase;
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--ink-soft);
-      padding: 0.6rem 1.4rem;
-      cursor: pointer;
-      transition: background 0.25s, color 0.25s, border-color 0.25s;
-      margin-top: 0.5rem;
-    }
-    .nav-overlay .animation-toggle.active,
-    .nav-overlay .animation-toggle:hover {
-      background: rgba(155,36,36,0.12);
-      color: var(--gold);
-      border-color: rgba(155,36,36,0.45);
-    }
     .hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
     .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
@@ -934,7 +918,6 @@
     <a href="#presenca" class="overlay-link">Presença</a>
     <a href="#galeria" class="overlay-link">Galeria</a>
     <a href="#entrevistas" class="overlay-link">Entrevistas</a>
-    <button class="animation-toggle" type="button" aria-pressed="false" title="Alternar animações">Animações</button>
   </div>
 
   <!-- NAV -->
