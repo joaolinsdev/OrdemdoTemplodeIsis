@@ -34,7 +34,7 @@
       font-family: 'Raleway', sans-serif;
       background-color: var(--cream);
       color: var(--ink);
-      overflow-x: hidden;
+      overflow-x: clip;
     }
 
     ::-webkit-scrollbar { width: 6px; }
@@ -478,7 +478,7 @@
     }
     /* overscroll nativo contido — evita o "rubber band" no iOS */
     html {
-      overflow-x: hidden;
+      overflow-x: clip;
       touch-action: pan-y;
     }
     body {
