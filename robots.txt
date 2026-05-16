@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ordemdo-templode-isis.vercel.app/sitemap.xml

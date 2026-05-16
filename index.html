@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#c9a85c" />
   <title>Soraya Magalla — Bailarina · Coreógrafa · Professora</title>
   <meta name="description" content="Soraya Magalla — pioneira da dança árabe no Nordeste do Brasil. Bailarina, coreógrafa e professora de Egyptian Ballet, Danças Árabes e Flamenco em Alagoas." />
   <meta name="author" content="Soraya Magalla" />
@@ -31,6 +32,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="shortcut icon" href="favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="android-chrome-512x512.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="preload" as="image" href="Imagens%20Soraya%20Magalla/ChatGPT%20Image%2015%20de%20mai.%20de%202026%2C%2016_08_14.png" fetchpriority="high" />
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
   <!-- Vercel Analytics -->
@@ -1225,7 +1228,9 @@
         <div class="hero-photo">
           <img src="Imagens%20Soraya%20Magalla/ChatGPT%20Image%2015%20de%20mai.%20de%202026%2C%2016_08_14.png"
                alt="Soraya Magalla"
-               loading="lazy">
+               loading="eager"
+               fetchpriority="high"
+               decoding="sync">
         </div>
         <div class="hero-badge">
           <div class="year">30+</div>
