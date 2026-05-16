@@ -109,6 +109,36 @@
       color: var(--gold);
       border-color: rgba(201,168,92,0.45);
     }
+    .lang-switcher {
+      display: none;
+      align-items: center;
+      gap: 0.25rem;
+      margin-left: 1.2rem;
+    }
+    @media (min-width: 1025px) and (hover: hover) and (pointer: fine) {
+      .lang-switcher { display: flex; }
+    }
+    .lang-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--ink-muted);
+      padding: 0.2rem 0.3rem; transition: color 0.25s;
+    }
+    .lang-btn:hover { color: var(--gold); }
+    .lang-btn.active { color: var(--gold); border-bottom: 1px solid var(--gold); }
+    .lang-sep { color: rgba(201,168,92,0.25); font-size: 0.6rem; user-select: none; }
+    /* lang no overlay mobile */
+    .overlay-lang {
+      display: flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem;
+    }
+    .overlay-lang .lang-btn {
+      font-size: 0.75rem; padding: 0.3rem 0.5rem;
+      border: 1px solid rgba(201,168,92,0.2); border-radius: 4px;
+    }
+    .overlay-lang .lang-btn.active {
+      border-color: var(--gold); color: var(--gold);
+    }
     .nav-links a {
       font-size: 0.78rem; font-weight: 500; letter-spacing: 0.15em;
       text-transform: uppercase; text-decoration: none;
@@ -918,9 +948,83 @@
       .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
       footer { padding: 3rem 1.5rem; }
     }
+
+    /* ── LOADING SCREEN ── */
+    #loading-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
+    #loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .ls-inner {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 0;
+    }
+    .ls-line-top {
+      width: 1px; height: 0; background: var(--gold);
+      animation: ls-grow-line 0.9s ease forwards 0.1s;
+      margin-bottom: 1.8rem;
+    }
+    @keyframes ls-grow-line { to { height: 60px; } }
+
+    .ls-tag {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      opacity: 0; animation: ls-fade-up 0.6s ease forwards 0.7s;
+      margin-bottom: 1.4rem;
+    }
+    .ls-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 700; line-height: 1.05;
+      color: var(--ink); letter-spacing: -0.01em;
+      opacity: 0; animation: ls-fade-up 0.8s ease forwards 0.95s;
+      margin-bottom: 1.6rem;
+    }
+    .ls-name em { color: var(--gold); font-style: italic; display: block; }
+
+    .ls-ornament {
+      display: flex; align-items: center; gap: 0.8rem;
+      opacity: 0; animation: ls-fade-up 0.6s ease forwards 1.3s;
+      margin-bottom: 2.4rem;
+    }
+    .ls-ornament span {
+      display: block; width: 40px; height: 1px; background: rgba(201,168,92,0.4);
+    }
+    .ls-diamond { font-size: 0.5rem; color: var(--gold); }
+
+    .ls-bar-track {
+      width: 160px; height: 1px; background: rgba(201,168,92,0.15);
+      overflow: hidden;
+      opacity: 0; animation: ls-fade-up 0.5s ease forwards 1.5s;
+    }
+    .ls-bar-fill {
+      height: 100%; width: 0; background: var(--gold);
+      animation: ls-bar 1.2s cubic-bezier(0.4,0,0.2,1) forwards 1.6s;
+    }
+    @keyframes ls-bar { to { width: 100%; } }
+    @keyframes ls-fade-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
+
+  <!-- LOADING SCREEN -->
+  <div id="loading-screen" aria-hidden="true">
+    <div class="ls-inner">
+      <div class="ls-line-top"></div>
+      <p class="ls-tag">Ordem do Templo de Ísis</p>
+      <h1 class="ls-name">Soraya<br><em>Magalla</em></h1>
+      <div class="ls-ornament">
+        <span></span><span class="ls-diamond">◆</span><span></span>
+      </div>
+      <div class="ls-bar-track"><div class="ls-bar-fill"></div></div>
+    </div>
+  </div>
 
   <!-- PROGRESS BAR -->
   <div id="progress-bar"></div>
@@ -934,30 +1038,42 @@
 
   <!-- MOBILE NAV OVERLAY -->
   <div class="nav-overlay" id="nav-overlay">
-    <a href="#sobre" class="overlay-link">Perfil</a>
-    <a href="#formacao" class="overlay-link">Formação</a>
-    <a href="#especializacao" class="overlay-link">Arte</a>
-    <a href="#professora" class="overlay-link">Ensino</a>
-    <a href="#imprensa" class="overlay-link">Imprensa</a>
-    <a href="#presenca" class="overlay-link">Presença</a>
-    <a href="#galeria" class="overlay-link">Galeria</a>
-    <a href="#entrevistas" class="overlay-link">Entrevistas</a>
+    <a href="#sobre"         class="overlay-link" data-i18n="nav.perfil">Perfil</a>
+    <a href="#formacao"      class="overlay-link" data-i18n="nav.formacao">Formação</a>
+    <a href="#especializacao" class="overlay-link" data-i18n="nav.arte">Arte</a>
+    <a href="#professora"    class="overlay-link" data-i18n="nav.ensino">Ensino</a>
+    <a href="#imprensa"      class="overlay-link" data-i18n="nav.imprensa">Imprensa</a>
+    <a href="#presenca"      class="overlay-link" data-i18n="nav.presenca">Presença</a>
+    <a href="#galeria"       class="overlay-link" data-i18n="nav.galeria">Galeria</a>
+    <a href="#entrevistas"   class="overlay-link" data-i18n="nav.entrevistas">Entrevistas</a>
+    <div class="overlay-lang">
+      <button class="lang-btn active" data-lang="pt">PT</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+    </div>
   </div>
 
   <!-- NAV -->
   <nav id="navbar">
     <a href="#hero" class="nav-logo">Soraya <span>Magalla</span></a>
     <ul class="nav-links">
-      <li><a href="#sobre">Perfil</a></li>
-      <li><a href="#formacao">Formação</a></li>
-      <li><a href="#especializacao">Arte</a></li>
-      <li><a href="#professora">Ensino</a></li>
-      <li><a href="#imprensa">Imprensa</a></li>
-      <li><a href="#presenca">Presença</a></li>
-      <li><a href="#galeria">Galeria</a></li>
-      <li><a href="#entrevistas">Entrevistas</a></li>
+      <li><a href="#sobre"          data-i18n="nav.perfil">Perfil</a></li>
+      <li><a href="#formacao"       data-i18n="nav.formacao">Formação</a></li>
+      <li><a href="#especializacao" data-i18n="nav.arte">Arte</a></li>
+      <li><a href="#professora"     data-i18n="nav.ensino">Ensino</a></li>
+      <li><a href="#imprensa"       data-i18n="nav.imprensa">Imprensa</a></li>
+      <li><a href="#presenca"       data-i18n="nav.presenca">Presença</a></li>
+      <li><a href="#galeria"        data-i18n="nav.galeria">Galeria</a></li>
+      <li><a href="#entrevistas"    data-i18n="nav.entrevistas">Entrevistas</a></li>
     </ul>
     <button id="animation-toggle" class="animation-toggle" type="button" aria-pressed="false" title="Alternar animações">Animações</button>
+    <div class="lang-switcher" aria-label="Idioma">
+      <button class="lang-btn active" data-lang="pt">PT</button>
+      <span class="lang-sep">|</span>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <span class="lang-sep">|</span>
+      <button class="lang-btn" data-lang="es">ES</button>
+    </div>
     <button class="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -967,19 +1083,19 @@
   <section id="hero">
     <div class="hero-bg-ornament"></div>
     <div class="hero-content">
-      <div class="hero-tagline">Marechal Deodoro · Alagoas · Brasil</div>
+      <div class="hero-tagline" data-i18n="hero.tagline">Marechal Deodoro · Alagoas · Brasil</div>
       <h1 class="hero-name">
         Soraya<br>
         <span class="accent">Magalla</span>
       </h1>
-      <p class="hero-subtitle">Bailarina · Coreógrafa · Professora</p>
-      <p class="hero-desc">
+      <p class="hero-subtitle" data-i18n="hero.subtitle">Bailarina · Coreógrafa · Professora</p>
+      <p class="hero-desc" data-i18n="hero.desc">
         Alagoana reconhecida como uma das pioneiras da dança árabe no Nordeste do Brasil.
         Décadas dedicadas à arte oriental, à formação de bailarinas e à preservação
         da cultura egípcia através do movimento e da espiritualidade.
       </p>
       <a href="#sobre" class="hero-cta">
-        Conhecer o perfil <span class="arrow">→</span>
+        <span data-i18n="hero.cta">Conhecer o perfil</span> <span class="arrow">→</span>
       </a>
     </div>
     <div class="hero-visual">
@@ -993,58 +1109,46 @@
         </div>
         <div class="hero-badge">
           <div class="year">30+</div>
-          <div class="badge-text">Anos de<br>Arte</div>
+          <div class="badge-text" data-i18n="hero.badge">Anos de<br>Arte</div>
         </div>
       </div>
     </div>
     <div class="hero-scroll-hint">
       <div class="scroll-line"></div>
-      Role para descobrir
+      <span data-i18n="hero.scroll">Role para descobrir</span>
     </div>
   </section>
 
   <!-- PERFIL -->
   <section id="sobre">
     <div class="sobre-text fade-in">
-      <div class="section-tag">Perfil</div>
-      <h2 class="section-title">Pioneira da dança<br>árabe no <em>Nordeste</em></h2>
+      <div class="section-tag" data-i18n="nav.perfil">Perfil</div>
+      <h2 class="section-title" data-i18n="sobre.title">Pioneira da dança<br>árabe no <em>Nordeste</em></h2>
       <div class="divider"></div>
-      <p>
-        <strong>Soraya Magalla</strong> é bailarina, coreógrafa e professora alagoana reconhecida
-        por sua trajetória na dança árabe no Brasil, especialmente no Nordeste. Considerada
-        por alunos e admiradores como uma das pioneiras da dança do ventre na região.
-      </p>
-      <p>
-        Ao longo de décadas, atuou na <em>formação de bailarinas</em> e na divulgação da
-        cultura oriental, ministrando cursos, workshops e apresentações em diversas cidades
-        brasileiras — de Alagoas ao Paraná.
-      </p>
+      <p data-i18n="sobre.p1"><strong>Soraya Magalla</strong> é bailarina, coreógrafa e professora alagoana reconhecida por sua trajetória na dança árabe no Brasil, especialmente no Nordeste. Considerada por alunos e admiradores como uma das pioneiras da dança do ventre na região.</p>
+      <p data-i18n="sobre.p2">Ao longo de décadas, atuou na <em>formação de bailarinas</em> e na divulgação da cultura oriental, ministrando cursos, workshops e apresentações em diversas cidades brasileiras — de Alagoas ao Paraná.</p>
       <div class="sobre-quote">
-        <p>"Coreógrafa Egyptian Ballet, Danças Árabes e Flamenco"</p>
-        <cite>— Soraya Magalla, Instagram</cite>
+        <p data-i18n="sobre.quote">"Coreógrafa Egyptian Ballet, Danças Árabes e Flamenco"</p>
+        <cite data-i18n="sobre.cite">— Soraya Magalla, Instagram</cite>
       </div>
-      <p>
-        Seu trabalho vai além do palco: ela pesquisou, documentou e ensinou, garantindo que
-        a riqueza cultural da dança oriental floresça e evolua nas terras nordestinas.
-        Uma <em>guardiã de uma tradição</em> milenar.
-      </p>
+      <p data-i18n="sobre.p3">Seu trabalho vai além do palco: ela pesquisou, documentou e ensinou, garantindo que a riqueza cultural da dança oriental floresça e evolua nas terras nordestinas. Uma <em>guardiã de uma tradição</em> milenar.</p>
     </div>
     <div class="stats-grid fade-in fade-in-delay-2">
       <div class="stat-card">
         <div class="stat-number">30+</div>
-        <div class="stat-label">Anos de<br>carreira</div>
+        <div class="stat-label" data-i18n="stat.career">Anos de<br>carreira</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">3</div>
-        <div class="stat-label">Estilos de<br>dança</div>
+        <div class="stat-label" data-i18n="stat.styles">Estilos de<br>dança</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">AL</div>
-        <div class="stat-label">Pioneira em<br>Alagoas</div>
+        <div class="stat-label" data-i18n="stat.pioneer">Pioneira em<br>Alagoas</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">NE</div>
-        <div class="stat-label">Referência no<br>Nordeste</div>
+        <div class="stat-label" data-i18n="stat.reference">Referência no<br>Nordeste</div>
       </div>
     </div>
   </section>
@@ -1052,16 +1156,16 @@
   <!-- FORMAÇÃO -->
   <section id="formacao">
     <div class="timeline-header fade-in">
-      <div class="section-tag">Formação</div>
-      <h2 class="section-title">Uma trajetória de<br><em>descobertas</em> e arte</h2>
+      <div class="section-tag" data-i18n="nav.formacao">Formação</div>
+      <h2 class="section-title" data-i18n="formacao.title">Uma trajetória de<br><em>descobertas</em> e arte</h2>
       <div class="divider"></div>
     </div>
     <div class="timeline">
       <div class="timeline-item">
         <div class="tl-content">
           <div class="tl-year">Início</div>
-          <div class="tl-title">Escola Eliana Cavalcanti</div>
-          <div class="tl-desc">Soraya iniciou sua formação no balé clássico na escola de dança Eliana Cavalcanti, onde desenvolveu as bases técnicas do movimento e despertou sua paixão pela expressão corporal.</div>
+          <div class="tl-title" data-i18n="tl.1.title">Escola Eliana Cavalcanti</div>
+          <div class="tl-desc" data-i18n="tl.1.desc">Soraya iniciou sua formação no balé clássico na escola de dança Eliana Cavalcanti, onde desenvolveu as bases técnicas do movimento e despertou sua paixão pela expressão corporal.</div>
         </div>
         <div class="tl-dot"><div class="tl-dot-inner"></div></div>
         <div class="tl-empty"></div>
@@ -1071,15 +1175,15 @@
         <div class="tl-dot"><div class="tl-dot-inner"></div></div>
         <div class="tl-content">
           <div class="tl-year">CENART</div>
-          <div class="tl-title">Aprofundamento técnico</div>
-          <div class="tl-desc">Estudou no CENART, em Alagoas, aprofundando seus conhecimentos técnicos e artísticos — passo fundamental na construção de sua identidade como artista.</div>
+          <div class="tl-title" data-i18n="tl.2.title">Aprofundamento técnico</div>
+          <div class="tl-desc" data-i18n="tl.2.desc">Estudou no CENART, em Alagoas, aprofundando seus conhecimentos técnicos e artísticos — passo fundamental na construção de sua identidade como artista.</div>
         </div>
       </div>
       <div class="timeline-item">
         <div class="tl-content">
           <div class="tl-year">Recife</div>
-          <div class="tl-title">A grande descoberta</div>
-          <div class="tl-desc">Durante um ciclo de dança no Teatro Santa Isabel, em Recife, foi descoberta pela renomada coreógrafa polonesa Halina Biernacka — um encontro que mudaria o rumo de sua carreira para sempre.</div>
+          <div class="tl-title" data-i18n="tl.3.title">A grande descoberta</div>
+          <div class="tl-desc" data-i18n="tl.3.desc">Durante um ciclo de dança no Teatro Santa Isabel, em Recife, foi descoberta pela renomada coreógrafa polonesa Halina Biernacka — um encontro que mudaria o rumo de sua carreira para sempre.</div>
         </div>
         <div class="tl-dot"><div class="tl-dot-inner"></div></div>
         <div class="tl-empty"></div>
@@ -1089,15 +1193,15 @@
         <div class="tl-dot"><div class="tl-dot-inner"></div></div>
         <div class="tl-content">
           <div class="tl-year">São Paulo</div>
-          <div class="tl-title">Escola Madeleine Shahrazad</div>
-          <div class="tl-desc">O reconhecimento abriu portas para São Paulo, onde Soraya estudou na tradicional escola de dança árabe Madeleine Shahrazad — consolidando sua especialização na arte oriental.</div>
+          <div class="tl-title" data-i18n="tl.4.title">Escola Madeleine Shahrazad</div>
+          <div class="tl-desc" data-i18n="tl.4.desc">O reconhecimento abriu portas para São Paulo, onde Soraya estudou na tradicional escola de dança árabe Madeleine Shahrazad — consolidando sua especialização na arte oriental.</div>
         </div>
       </div>
       <div class="timeline-item">
         <div class="tl-content">
           <div class="tl-year">Grécia</div>
-          <div class="tl-title">Expansão internacional</div>
-          <div class="tl-desc">Após São Paulo, Soraya levou a dança para além do território nacional, apresentando e estudando em festivais e residências na Grécia — aproximando seu trabalho do circuito internacional.</div>
+          <div class="tl-title" data-i18n="tl.5.title">Expansão internacional</div>
+          <div class="tl-desc" data-i18n="tl.5.desc">Após São Paulo, Soraya levou a dança para além do território nacional, apresentando e estudando em festivais e residências na Grécia — aproximando seu trabalho do circuito internacional.</div>
         </div>
         <div class="tl-dot"><div class="tl-dot-inner"></div></div>
         <div class="tl-empty"></div>
@@ -1107,15 +1211,15 @@
         <div class="tl-dot"><div class="tl-dot-inner"></div></div>
         <div class="tl-content">
           <div class="tl-year">Madrid</div>
-          <div class="tl-title">Flamenco em Madrid</div>
-          <div class="tl-desc">Recentemente cursou flamenco em Madrid, ampliando ainda mais sua paleta de dança e fundindo a sensibilidade espanhola com sua base oriental.</div>
+          <div class="tl-title" data-i18n="tl.6.title">Flamenco em Madrid</div>
+          <div class="tl-desc" data-i18n="tl.6.desc">Recentemente cursou flamenco em Madrid, ampliando ainda mais sua paleta de dança e fundindo a sensibilidade espanhola com sua base oriental.</div>
         </div>
       </div>
       <div class="timeline-item">
         <div class="tl-content">
           <div class="tl-year">Hoje</div>
-          <div class="tl-title">Legado vivo</div>
-          <div class="tl-desc">Com décadas de estrada, Soraya retornou ao Nordeste para semear o que aprendeu, formando gerações de bailarinas e tornando Alagoas um polo de referência na dança oriental brasileira.</div>
+          <div class="tl-title" data-i18n="tl.7.title">Legado vivo</div>
+          <div class="tl-desc" data-i18n="tl.7.desc">Com décadas de estrada, Soraya retornou ao Nordeste para semear o que aprendeu, formando gerações de bailarinas e tornando Alagoas um polo de referência na dança oriental brasileira.</div>
         </div>
         <div class="tl-dot"><div class="tl-dot-inner"></div></div>
         <div class="tl-empty"></div>
@@ -1126,13 +1230,10 @@
   <!-- ESPECIALIZAÇÃO -->
   <section id="especializacao">
     <div class="especializacao-header fade-in">
-      <div class="section-tag">Especialização</div>
-      <h2 class="section-title">As <em>artes</em> que<br>definem Soraya</h2>
+      <div class="section-tag" data-i18n="nav.arte">Especialização</div>
+      <h2 class="section-title" data-i18n="espec.title">As <em>artes</em> que<br>definem Soraya</h2>
       <div class="divider"></div>
-      <p class="especializacao-intro">
-        Mais do que uma dançarina, Soraya é uma artista multifacetada. Seu trabalho mistura
-        tradição, teatro, espiritualidade e técnica — criando uma linguagem própria e única.
-      </p>
+      <p class="especializacao-intro" data-i18n="espec.intro">Mais do que uma dançarina, Soraya é uma artista multifacetada. Seu trabalho mistura tradição, teatro, espiritualidade e técnica — criando uma linguagem própria e única.</p>
     </div>
     <div class="especializacao-grid fade-in fade-in-delay-1">
       <div class="spec-card">
@@ -1143,7 +1244,7 @@
           </svg>
         </div>
         <div class="spec-title">Egyptian Ballet</div>
-        <div class="spec-desc">Fusão única entre ballet clássico e movimentos da dança egípcia. Soraya desenvolveu apresentações que unem a precisão técnica do balé à expressividade e ancestralidade da arte do Egito antigo.</div>
+        <div class="spec-desc" data-i18n="spec.1.desc">Fusão única entre ballet clássico e movimentos da dança egípcia. Soraya desenvolveu apresentações que unem a precisão técnica do balé à expressividade e ancestralidade da arte do Egito antigo.</div>
       </div>
       <div class="spec-card">
         <div class="spec-number">02</div>
@@ -1153,7 +1254,7 @@
           </svg>
         </div>
         <div class="spec-title">Dança do Ventre</div>
-        <div class="spec-desc">Arte milenar com raízes no antigo Egito, a dança do ventre é o coração do trabalho de Soraya. Ela explora seus aspectos terapêuticos, espirituais e femininos, além da técnica tradicional.</div>
+        <div class="spec-desc" data-i18n="spec.2.desc">Arte milenar com raízes no antigo Egito, a dança do ventre é o coração do trabalho de Soraya. Ela explora seus aspectos terapêuticos, espirituais e femininos, além da técnica tradicional.</div>
       </div>
       <div class="spec-card">
         <div class="spec-number">03</div>
@@ -1163,7 +1264,7 @@
           </svg>
         </div>
         <div class="spec-title">Flamenco</div>
-        <div class="spec-desc">A paixão espanhola encontra a alma árabe. O flamenco compõe a paleta artística de Soraya como extensão natural de sua busca pela expressão corporal mais intensa e dramática.</div>
+        <div class="spec-desc" data-i18n="spec.3.desc">A paixão espanhola encontra a alma árabe. O flamenco compõe a paleta artística de Soraya como extensão natural de sua busca pela expressão corporal mais intensa e dramática.</div>
       </div>
       <div class="spec-card">
         <div class="spec-number">04</div>
@@ -1173,7 +1274,7 @@
           </svg>
         </div>
         <div class="spec-title">Sagrado Feminino</div>
-        <div class="spec-desc">A conexão entre movimento e espiritualidade feminina. Soraya incorpora em seu trabalho uma visão da dança como ritual, cura e autoconhecimento — transformando o palco em espaço sagrado.</div>
+        <div class="spec-desc" data-i18n="spec.4.desc">A conexão entre movimento e espiritualidade feminina. Soraya incorpora em seu trabalho uma visão da dança como ritual, cura e autoconhecimento — transformando o palco em espaço sagrado.</div>
       </div>
     </div>
   </section>
@@ -1181,29 +1282,20 @@
   <!-- PROFESSORA -->
   <section id="professora">
     <div class="professora-text fade-in">
-      <div class="section-tag">Ensino</div>
-      <h2 class="section-title">Formando novas<br><em>gerações</em></h2>
+      <div class="section-tag" data-i18n="nav.ensino">Ensino</div>
+      <h2 class="section-title" data-i18n="prof.title">Formando novas<br><em>gerações</em></h2>
       <div class="divider"></div>
-      <p>
-        <strong>Soraya Magalla</strong> dedicou grande parte de sua carreira ao ensino.
-        Ficou conhecida pela formação de novas bailarinas e pela valorização da
-        cultura árabe no Nordeste.
-      </p>
-      <p>
-        Ela ministrou <em>cursos, workshops e apresentações</em> em diferentes cidades
-        brasileiras, levando a arte oriental para onde quer que fosse — de Alagoas
-        até o interior do Paraná.
-      </p>
+      <p data-i18n="prof.p1"><strong>Soraya Magalla</strong> dedicou grande parte de sua carreira ao ensino. Ficou conhecida pela formação de novas bailarinas e pela valorização da cultura árabe no Nordeste.</p>
+      <p data-i18n="prof.p2">Ela ministrou <em>cursos, workshops e apresentações</em> em diferentes cidades brasileiras, levando a arte oriental para onde quer que fosse — de Alagoas até o interior do Paraná.</p>
       <div class="quote-box">
-        <p>"A dança tem sido utilizada como forma de terapia capaz de superar e fortalecer
-        a autoestima da mulher, contribuindo para o equilíbrio físico e emocional."</p>
+        <p data-i18n="prof.quote">"A dança tem sido utilizada como forma de terapia capaz de superar e fortalecer a autoestima da mulher, contribuindo para o equilíbrio físico e emocional."</p>
       </div>
       <ul class="atuacao-list">
-        <li>Cursos e workshops em múltiplas cidades brasileiras</li>
-        <li>Formação de bailarinas que atuam em todo o Nordeste</li>
-        <li>Valorização da cultura árabe e oriental na região</li>
-        <li>Apresentações com foco terapêutico e espiritual</li>
-        <li>Projetos ligados ao sagrado feminino e cultura oriental</li>
+        <li data-i18n="prof.li1">Cursos e workshops em múltiplas cidades brasileiras</li>
+        <li data-i18n="prof.li2">Formação de bailarinas que atuam em todo o Nordeste</li>
+        <li data-i18n="prof.li3">Valorização da cultura árabe e oriental na região</li>
+        <li data-i18n="prof.li4">Apresentações com foco terapêutico e espiritual</li>
+        <li data-i18n="prof.li5">Projetos ligados ao sagrado feminino e cultura oriental</li>
       </ul>
     </div>
     <div class="info-cards fade-in fade-in-delay-2">
@@ -1259,13 +1351,10 @@
   <!-- IMPRENSA -->
   <section id="imprensa">
     <div class="imprensa-header fade-in">
-      <div class="section-tag">Imprensa</div>
-      <h2 class="section-title">Na <em>mídia</em> brasileira</h2>
+      <div class="section-tag" data-i18n="nav.imprensa">Imprensa</div>
+      <h2 class="section-title" data-i18n="imp.title">Na <em>mídia</em> brasileira</h2>
       <div class="divider"></div>
-      <p class="imprensa-intro">
-        De Alagoas ao Paraná — cinco décadas de cobertura jornalística que documentam
-        a trajetória de Soraya Magalla pela imprensa brasileira.
-      </p>
+      <p class="imprensa-intro" data-i18n="imp.intro">De Alagoas ao Paraná — cinco décadas de cobertura jornalística que documentam a trajetória de Soraya Magalla pela imprensa brasileira.</p>
     </div>
 
     <div class="clippings-grid">
@@ -1326,13 +1415,10 @@
   <!-- PRESENÇA CULTURAL -->
   <section id="presenca">
     <div class="presenca-header fade-in">
-      <div class="section-tag">Presença</div>
-      <h2 class="section-title">Arte além<br>dos <em>palcos</em></h2>
+      <div class="section-tag" data-i18n="nav.presenca">Presença</div>
+      <h2 class="section-title" data-i18n="pres.title">Arte além<br>dos <em>palcos</em></h2>
       <div class="divider"></div>
-      <p class="presenca-intro">
-        A presença de Soraya Magalla vai muito além das apresentações ao vivo.
-        Sua arte alcança pessoas em múltiplas plataformas e contextos culturais por todo o Brasil.
-      </p>
+      <p class="presenca-intro" data-i18n="pres.intro">A presença de Soraya Magalla vai muito além das apresentações ao vivo. Sua arte alcança pessoas em múltiplas plataformas e contextos culturais por todo o Brasil.</p>
     </div>
     <div class="presenca-grid fade-in fade-in-delay-1">
       <div class="presenca-card">
@@ -1396,12 +1482,10 @@
   <!-- GALERIA -->
   <section id="galeria">
     <div class="fade-in">
-      <div class="section-tag">Galeria</div>
-      <h2 class="section-title">Momentos em <em>movimento</em></h2>
+      <div class="section-tag" data-i18n="nav.galeria">Galeria</div>
+      <h2 class="section-title" data-i18n="gal.title">Momentos em <em>movimento</em></h2>
       <div class="divider"></div>
-      <p class="galeria-intro">
-        Três décadas de arte capturadas em imagem — dos palcos de Alagoas às cenas internacionais.
-      </p>
+      <p class="galeria-intro" data-i18n="gal.intro">Três décadas de arte capturadas em imagem — dos palcos de Alagoas às cenas internacionais.</p>
     </div>
 
     <div class="gallery-masonry fade-in">
@@ -1508,13 +1592,10 @@
   <!-- ENTREVISTAS -->
   <section id="entrevistas">
     <div class="entrevistas-header fade-in">
-      <div class="section-tag">Entrevistas</div>
-      <h2 class="section-title">Voz e <em>movimento</em></h2>
+      <div class="section-tag" data-i18n="nav.entrevistas">Entrevistas</div>
+      <h2 class="section-title" data-i18n="ent.title">Voz e <em>movimento</em></h2>
       <div class="divider"></div>
-      <p class="entrevistas-intro">
-        Soraya Magalla concedeu entrevistas e participou de produções audiovisuais que documentam
-        sua trajetória, sua arte e suas contribuições para a cultura oriental no Brasil.
-      </p>
+      <p class="entrevistas-intro" data-i18n="ent.intro">Soraya Magalla concedeu entrevistas e participou de produções audiovisuais que documentam sua trajetória, sua arte e suas contribuições para a cultura oriental no Brasil.</p>
     </div>
 
     <div class="thesmorphoria-highlight fade-in fade-in-delay-1">
@@ -1638,7 +1719,8 @@
           <a class="social-link" href="https://www.youtube.com/channel/UCK_02IO4SJuDqAKR6lxntSQ" target="_blank" rel="noopener" aria-label="YouTube">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
-              <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/>
+              <polygon points="9.75
+              15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/>
             </svg>
           </a>
         </div>
@@ -1676,6 +1758,15 @@
 
   <script>
     gsap.registerPlugin(ScrollTrigger);
+
+    /* ── LOADING SCREEN ── */
+    const loadingScreen = document.getElementById('loading-screen');
+    const hideLoading = () => loadingScreen.classList.add('hidden');
+    if (document.readyState === 'complete') {
+      setTimeout(hideLoading, 2900);
+    } else {
+      window.addEventListener('load', () => setTimeout(hideLoading, 2900));
+    }
 
     /* ── LENIS + GSAP ── */
     const savedAnimationPref = localStorage.getItem('otiAnimations');
@@ -2021,6 +2112,147 @@
         if (e.key === 'ArrowRight') go(1);
       });
     }());
+
+    /* ── INTERNACIONALIZAÇÃO (PT / EN / ES) ── */
+    const translations = {
+      pt: {
+        'nav.perfil':'Perfil','nav.formacao':'Formação','nav.arte':'Arte',
+        'nav.ensino':'Ensino','nav.imprensa':'Imprensa','nav.presenca':'Presença',
+        'nav.galeria':'Galeria','nav.entrevistas':'Entrevistas',
+        'hero.tagline':'Marechal Deodoro · Alagoas · Brasil',
+        'hero.subtitle':'Bailarina · Coreógrafa · Professora',
+        'hero.desc':'Alagoana reconhecida como uma das pioneiras da dança árabe no Nordeste do Brasil. Décadas dedicadas à arte oriental, à formação de bailarinas e à preservação da cultura egípcia através do movimento e da espiritualidade.',
+        'hero.cta':'Conhecer o perfil','hero.badge':'Anos de<br>Arte','hero.scroll':'Role para descobrir',
+        'sobre.title':'Pioneira da dança<br>árabe no <em>Nordeste</em>',
+        'sobre.p1':'<strong>Soraya Magalla</strong> é bailarina, coreógrafa e professora alagoana reconhecida por sua trajetória na dança árabe no Brasil, especialmente no Nordeste. Considerada por alunos e admiradores como uma das pioneiras da dança do ventre na região.',
+        'sobre.p2':'Ao longo de décadas, atuou na <em>formação de bailarinas</em> e na divulgação da cultura oriental, ministrando cursos, workshops e apresentações em diversas cidades brasileiras — de Alagoas ao Paraná.',
+        'sobre.p3':'Seu trabalho vai além do palco: ela pesquisou, documentou e ensinou, garantindo que a riqueza cultural da dança oriental floresça e evolua nas terras nordestinas. Uma <em>guardiã de uma tradição</em> milenar.',
+        'sobre.quote':'"Coreógrafa Egyptian Ballet, Danças Árabes e Flamenco"','sobre.cite':'— Soraya Magalla, Instagram',
+        'stat.career':'Anos de<br>carreira','stat.styles':'Estilos de<br>dança','stat.pioneer':'Pioneira em<br>Alagoas','stat.reference':'Referência no<br>Nordeste',
+        'formacao.title':'Uma trajetória de<br><em>descobertas</em> e arte',
+        'tl.1.title':'Escola Eliana Cavalcanti','tl.1.desc':'Soraya iniciou sua formação no balé clássico na escola de dança Eliana Cavalcanti, onde desenvolveu as bases técnicas do movimento e despertou sua paixão pela expressão corporal.',
+        'tl.2.title':'Aprofundamento técnico','tl.2.desc':'Estudou no CENART, em Alagoas, aprofundando seus conhecimentos técnicos e artísticos — passo fundamental na construção de sua identidade como artista.',
+        'tl.3.title':'A grande descoberta','tl.3.desc':'Durante um ciclo de dança no Teatro Santa Isabel, em Recife, foi descoberta pela renomada coreógrafa polonesa Halina Biernacka — um encontro que mudaria o rumo de sua carreira para sempre.',
+        'tl.4.title':'Escola Madeleine Shahrazad','tl.4.desc':'O reconhecimento abriu portas para São Paulo, onde Soraya estudou na tradicional escola de dança árabe Madeleine Shahrazad — consolidando sua especialização na arte oriental.',
+        'tl.5.title':'Expansão internacional','tl.5.desc':'Após São Paulo, Soraya levou a dança para além do território nacional, apresentando e estudando em festivais e residências na Grécia — aproximando seu trabalho do circuito internacional.',
+        'tl.6.title':'Flamenco em Madrid','tl.6.desc':'Recentemente cursou flamenco em Madrid, ampliando ainda mais sua paleta de dança e fundindo a sensibilidade espanhola com sua base oriental.',
+        'tl.7.title':'Legado vivo','tl.7.desc':'Com décadas de estrada, Soraya retornou ao Nordeste para semear o que aprendeu, formando gerações de bailarinas e tornando Alagoas um polo de referência na dança oriental brasileira.',
+        'espec.title':'As <em>artes</em> que<br>definem Soraya',
+        'espec.intro':'Mais do que uma dançarina, Soraya é uma artista multifacetada. Seu trabalho mistura tradição, teatro, espiritualidade e técnica — criando uma linguagem própria e única.',
+        'spec.1.desc':'Fusão única entre ballet clássico e movimentos da dança egípcia. Soraya desenvolveu apresentações que unem a precisão técnica do balé à expressividade e ancestralidade da arte do Egito antigo.',
+        'spec.2.desc':'Arte milenar com raízes no antigo Egito, a dança do ventre é o coração do trabalho de Soraya. Ela explora seus aspectos terapêuticos, espirituais e femininos, além da técnica tradicional.',
+        'spec.3.desc':'A paixão espanhola encontra a alma árabe. O flamenco compõe a paleta artística de Soraya como extensão natural de sua busca pela expressão corporal mais intensa e dramática.',
+        'spec.4.desc':'A conexão entre movimento e espiritualidade feminina. Soraya incorpora em seu trabalho uma visão da dança como ritual, cura e autoconhecimento — transformando o palco em espaço sagrado.',
+        'prof.title':'Formando novas<br><em>gerações</em>',
+        'prof.p1':'<strong>Soraya Magalla</strong> dedicou grande parte de sua carreira ao ensino. Ficou conhecida pela formação de novas bailarinas e pela valorização da cultura árabe no Nordeste.',
+        'prof.p2':'Ela ministrou <em>cursos, workshops e apresentações</em> em diferentes cidades brasileiras, levando a arte oriental para onde quer que fosse — de Alagoas até o interior do Paraná.',
+        'prof.quote':'"A dança tem sido utilizada como forma de terapia capaz de superar e fortalecer a autoestima da mulher, contribuindo para o equilíbrio físico e emocional."',
+        'prof.li1':'Cursos e workshops em múltiplas cidades brasileiras','prof.li2':'Formação de bailarinas que atuam em todo o Nordeste',
+        'prof.li3':'Valorização da cultura árabe e oriental na região','prof.li4':'Apresentações com foco terapêutico e espiritual','prof.li5':'Projetos ligados ao sagrado feminino e cultura oriental',
+        'imp.title':'Na <em>mídia</em> brasileira','imp.intro':'De Alagoas ao Paraná — cinco décadas de cobertura jornalística que documentam a trajetória de Soraya Magalla pela imprensa brasileira.',
+        'pres.title':'Arte além<br>dos <em>palcos</em>','pres.intro':'A presença de Soraya Magalla vai muito além das apresentações ao vivo. Sua arte alcança pessoas em múltiplas plataformas e contextos culturais por todo o Brasil.',
+        'gal.title':'Momentos em <em>movimento</em>','gal.intro':'Três décadas de arte capturadas em imagem — dos palcos de Alagoas às cenas internacionais.',
+        'ent.title':'Voz e <em>movimento</em>','ent.intro':'Soraya Magalla concedeu entrevistas e participou de produções audiovisuais que documentam sua trajetória, sua arte e suas contribuições para a cultura oriental no Brasil.',
+      },
+      en: {
+        'nav.perfil':'Profile','nav.formacao':'Training','nav.arte':'Art',
+        'nav.ensino':'Teaching','nav.imprensa':'Press','nav.presenca':'Presence',
+        'nav.galeria':'Gallery','nav.entrevistas':'Interviews',
+        'hero.tagline':'Marechal Deodoro · Alagoas · Brazil',
+        'hero.subtitle':'Dancer · Choreographer · Teacher',
+        'hero.desc':'From Alagoas, recognized as one of the pioneers of Arabic dance in Northeast Brazil. Decades dedicated to oriental art, training dancers, and preserving Egyptian culture through movement and spirituality.',
+        'hero.cta':'Discover the profile','hero.badge':'Years of<br>Art','hero.scroll':'Scroll to discover',
+        'sobre.title':'Pioneer of Arabic dance<br>in the <em>Northeast</em>',
+        'sobre.p1':'<strong>Soraya Magalla</strong> is a dancer, choreographer, and teacher from Alagoas, recognized for her journey in Arabic dance across Brazil, especially in the Northeast. Considered by students and admirers as one of the pioneers of belly dance in the region.',
+        'sobre.p2':'Over decades, she dedicated herself to <em>training dancers</em> and promoting oriental culture, teaching courses, workshops, and performances in various Brazilian cities — from Alagoas to Paraná.',
+        'sobre.p3':'Her work goes beyond the stage: she researched, documented, and taught, ensuring that the cultural richness of oriental dance flourishes and evolves in the northeastern lands. A <em>guardian of an ancient tradition</em>.',
+        'sobre.quote':'"Choreographer of Egyptian Ballet, Arabic Dances and Flamenco"','sobre.cite':'— Soraya Magalla, Instagram',
+        'stat.career':'Years of<br>career','stat.styles':'Dance<br>styles','stat.pioneer':'Pioneer in<br>Alagoas','stat.reference':'Reference in<br>Northeast',
+        'formacao.title':'A journey of<br><em>discoveries</em> and art',
+        'tl.1.title':'Eliana Cavalcanti School','tl.1.desc':'Soraya began her training in classical ballet at the Eliana Cavalcanti dance school, where she developed the technical foundations of movement and awakened her passion for physical expression.',
+        'tl.2.title':'Technical deepening','tl.2.desc':'She studied at CENART in Alagoas, deepening her technical and artistic knowledge — a fundamental step in building her identity as an artist.',
+        'tl.3.title':'The great discovery','tl.3.desc':'During a dance cycle at Teatro Santa Isabel in Recife, she was discovered by renowned Polish choreographer Halina Biernacka — an encounter that would change the course of her career forever.',
+        'tl.4.title':'Madeleine Shahrazad School','tl.4.desc':'The recognition opened doors to São Paulo, where Soraya studied at the traditional Arabic dance school Madeleine Shahrazad — consolidating her specialization in oriental art.',
+        'tl.5.title':'International expansion','tl.5.desc':'After São Paulo, Soraya took dance beyond national borders, performing and studying at festivals and residencies in Greece — bringing her work closer to the international circuit.',
+        'tl.6.title':'Flamenco in Madrid','tl.6.desc':'She recently studied flamenco in Madrid, further expanding her dance palette and fusing Spanish sensibility with her oriental foundation.',
+        'tl.7.title':'Living legacy','tl.7.desc':'With decades of experience, Soraya returned to the Northeast to share what she learned, training generations of dancers and making Alagoas a reference point for oriental dance in Brazil.',
+        'espec.title':'The <em>arts</em> that<br>define Soraya',
+        'espec.intro':'More than a dancer, Soraya is a multifaceted artist. Her work blends tradition, theatre, spirituality, and technique — creating a unique and personal language.',
+        'spec.1.desc':'A unique fusion between classical ballet and Egyptian dance movements. Soraya developed performances that unite the technical precision of ballet with the expressiveness and ancestry of ancient Egyptian art.',
+        'spec.2.desc':'An ancient art rooted in Egypt, belly dance is at the heart of Soraya\'s work. She explores its therapeutic, spiritual, and feminine aspects, beyond the traditional technique.',
+        'spec.3.desc':'Spanish passion meets the Arabic soul. Flamenco forms part of Soraya\'s artistic palette as a natural extension of her search for the most intense and dramatic physical expression.',
+        'spec.4.desc':'The connection between movement and feminine spirituality. Soraya incorporates into her work a vision of dance as ritual, healing, and self-knowledge — transforming the stage into a sacred space.',
+        'prof.title':'Training new<br><em>generations</em>',
+        'prof.p1':'<strong>Soraya Magalla</strong> devoted a great part of her career to teaching. She became known for training new dancers and promoting Arabic culture in the Northeast.',
+        'prof.p2':'She taught <em>courses, workshops, and performances</em> in different Brazilian cities, bringing oriental art wherever she went — from Alagoas to the interior of Paraná.',
+        'prof.quote':'"Dance has been used as a form of therapy capable of overcoming and strengthening women\'s self-esteem, contributing to physical and emotional balance."',
+        'prof.li1':'Courses and workshops in multiple Brazilian cities','prof.li2':'Training of dancers performing throughout the Northeast',
+        'prof.li3':'Promotion of Arabic and oriental culture in the region','prof.li4':'Performances with a therapeutic and spiritual focus','prof.li5':'Projects linked to the sacred feminine and oriental culture',
+        'imp.title':'In the Brazilian <em>media</em>','imp.intro':'From Alagoas to Paraná — five decades of journalistic coverage documenting Soraya Magalla\'s journey through the Brazilian press.',
+        'pres.title':'Art beyond<br>the <em>stage</em>','pres.intro':'Soraya Magalla\'s presence goes far beyond live performances. Her art reaches people across multiple platforms and cultural contexts throughout Brazil.',
+        'gal.title':'Moments in <em>motion</em>','gal.intro':'Three decades of art captured in images — from the stages of Alagoas to international scenes.',
+        'ent.title':'Voice and <em>movement</em>','ent.intro':'Soraya Magalla has given interviews and participated in audiovisual productions that document her journey, her art, and her contributions to oriental culture in Brazil.',
+      },
+      es: {
+        'nav.perfil':'Perfil','nav.formacao':'Formación','nav.arte':'Arte',
+        'nav.ensino':'Enseñanza','nav.imprensa':'Prensa','nav.presenca':'Presencia',
+        'nav.galeria':'Galería','nav.entrevistas':'Entrevistas',
+        'hero.tagline':'Marechal Deodoro · Alagoas · Brasil',
+        'hero.subtitle':'Bailarina · Coreógrafa · Profesora',
+        'hero.desc':'Alagoana reconocida como una de las pioneras de la danza árabe en el Nordeste de Brasil. Décadas dedicadas al arte oriental, a la formación de bailarinas y a la preservación de la cultura egipcia a través del movimiento y la espiritualidad.',
+        'hero.cta':'Conocer el perfil','hero.badge':'Años de<br>Arte','hero.scroll':'Desplázate para descubrir',
+        'sobre.title':'Pionera de la danza árabe<br>en el <em>Nordeste</em>',
+        'sobre.p1':'<strong>Soraya Magalla</strong> es bailarina, coreógrafa y profesora alagoana reconocida por su trayectoria en la danza árabe en Brasil, especialmente en el Nordeste. Considerada por alumnos y admiradores como una de las pioneras de la danza del vientre en la región.',
+        'sobre.p2':'A lo largo de décadas, se dedicó a la <em>formación de bailarinas</em> y a la difusión de la cultura oriental, impartiendo cursos, talleres y actuaciones en diversas ciudades brasileñas — de Alagoas a Paraná.',
+        'sobre.p3':'Su trabajo va más allá del escenario: investigó, documentó y enseñó, garantizando que la riqueza cultural de la danza oriental florezca y evolucione en tierras nordesteñas. Una <em>guardiana de una tradición</em> milenaria.',
+        'sobre.quote':'"Coreógrafa de Egyptian Ballet, Danzas Árabes y Flamenco"','sobre.cite':'— Soraya Magalla, Instagram',
+        'stat.career':'Años de<br>carrera','stat.styles':'Estilos de<br>danza','stat.pioneer':'Pionera en<br>Alagoas','stat.reference':'Referencia en<br>el Nordeste',
+        'formacao.title':'Una trayectoria de<br><em>descubrimientos</em> y arte',
+        'tl.1.title':'Escuela Eliana Cavalcanti','tl.1.desc':'Soraya inició su formación en ballet clásico en la escuela de danza Eliana Cavalcanti, donde desarrolló las bases técnicas del movimiento y despertó su pasión por la expresión corporal.',
+        'tl.2.title':'Profundización técnica','tl.2.desc':'Estudió en el CENART, en Alagoas, profundizando sus conocimientos técnicos y artísticos — paso fundamental en la construcción de su identidad como artista.',
+        'tl.3.title':'El gran descubrimiento','tl.3.desc':'Durante un ciclo de danza en el Teatro Santa Isabel, en Recife, fue descubierta por la reconocida coreógrafa polaca Halina Biernacka — un encuentro que cambiaría el rumbo de su carrera para siempre.',
+        'tl.4.title':'Escuela Madeleine Shahrazad','tl.4.desc':'El reconocimiento abrió puertas hacia São Paulo, donde Soraya estudió en la tradicional escuela de danza árabe Madeleine Shahrazad — consolidando su especialización en el arte oriental.',
+        'tl.5.title':'Expansión internacional','tl.5.desc':'Tras São Paulo, Soraya llevó la danza más allá de las fronteras nacionales, actuando y estudiando en festivales y residencias en Grecia — acercando su trabajo al circuito internacional.',
+        'tl.6.title':'Flamenco en Madrid','tl.6.desc':'Recientemente cursó flamenco en Madrid, ampliando aún más su paleta de danza y fusionando la sensibilidad española con su base oriental.',
+        'tl.7.title':'Legado vivo','tl.7.desc':'Con décadas de experiencia, Soraya regresó al Nordeste para sembrar lo que aprendió, formando generaciones de bailarinas y convirtiendo Alagoas en un polo de referencia en la danza oriental brasileña.',
+        'espec.title':'Las <em>artes</em> que<br>definen a Soraya',
+        'espec.intro':'Más que una bailarina, Soraya es una artista multifacética. Su trabajo mezcla tradición, teatro, espiritualidad y técnica — creando un lenguaje propio y único.',
+        'spec.1.desc':'Fusión única entre el ballet clásico y los movimientos de la danza egipcia. Soraya desarrolló actuaciones que unen la precisión técnica del ballet con la expresividad y la ancestralidad del arte del antiguo Egipto.',
+        'spec.2.desc':'Arte milenario con raíces en el antiguo Egipto, la danza del vientre es el corazón del trabajo de Soraya. Explora sus aspectos terapéuticos, espirituales y femeninos, además de la técnica tradicional.',
+        'spec.3.desc':'La pasión española encuentra el alma árabe. El flamenco forma parte de la paleta artística de Soraya como extensión natural de su búsqueda por la expresión corporal más intensa y dramática.',
+        'spec.4.desc':'La conexión entre el movimiento y la espiritualidad femenina. Soraya incorpora en su trabajo una visión de la danza como ritual, sanación y autoconocimiento — transformando el escenario en espacio sagrado.',
+        'prof.title':'Formando nuevas<br><em>generaciones</em>',
+        'prof.p1':'<strong>Soraya Magalla</strong> dedicó gran parte de su carrera a la enseñanza. Se hizo conocida por la formación de nuevas bailarinas y por la valorización de la cultura árabe en el Nordeste.',
+        'prof.p2':'Impartió <em>cursos, talleres y actuaciones</em> en diferentes ciudades brasileñas, llevando el arte oriental a donde fuera — de Alagoas hasta el interior de Paraná.',
+        'prof.quote':'"La danza ha sido utilizada como forma de terapia capaz de superar y fortalecer la autoestima de la mujer, contribuyendo al equilibrio físico y emocional."',
+        'prof.li1':'Cursos y talleres en múltiples ciudades brasileñas','prof.li2':'Formación de bailarinas que actúan en todo el Nordeste',
+        'prof.li3':'Valorización de la cultura árabe y oriental en la región','prof.li4':'Actuaciones con enfoque terapéutico y espiritual','prof.li5':'Proyectos vinculados al sagrado femenino y la cultura oriental',
+        'imp.title':'En los <em>medios</em> brasileños','imp.intro':'De Alagoas a Paraná — cinco décadas de cobertura periodística que documentan la trayectoria de Soraya Magalla en la prensa brasileña.',
+        'pres.title':'Arte más allá<br>de los <em>escenarios</em>','pres.intro':'La presencia de Soraya Magalla va mucho más allá de las actuaciones en vivo. Su arte llega a personas en múltiples plataformas y contextos culturales en todo Brasil.',
+        'gal.title':'Momentos en <em>movimiento</em>','gal.intro':'Tres décadas de arte capturadas en imágenes — desde los escenarios de Alagoas hasta las escenas internacionales.',
+        'ent.title':'Voz y <em>movimiento</em>','ent.intro':'Soraya Magalla concedió entrevistas y participó en producciones audiovisuales que documentan su trayectoria, su arte y sus contribuciones a la cultura oriental en Brasil.',
+      }
+    };
+
+    function setLanguage(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const t = translations[lang]?.[el.dataset.i18n];
+        if (t !== undefined) el.innerHTML = t;
+      });
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+      localStorage.setItem('otiLang', lang);
+    }
+
+    const savedLang = localStorage.getItem('otiLang') ||
+      (navigator.language?.startsWith('es') ? 'es' : navigator.language?.startsWith('en') ? 'en' : 'pt');
+    setLanguage(savedLang);
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    });
   </script>
 </body>
 </html>
