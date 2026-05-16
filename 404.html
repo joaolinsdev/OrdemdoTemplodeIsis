@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página não encontrada — Soraya Magalla</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="android-chrome-512x512.png" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream:    #0e0b06;
+      --gold:     #c9a85c;
+      --gold-dark:#a67c3a;
+      --ink:      #f5ead0;
+      --ink-soft: #d4c5a0;
+      --ink-muted:#9a8b6e;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Raleway', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    .ornament {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      margin: 0 auto 2.5rem;
+    }
+
+    .code {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(5rem, 20vw, 10rem);
+      font-weight: 700;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,168,92,0.3);
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      user-select: none;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    .title em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .desc {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--ink-muted);
+      line-height: 1.8;
+      max-width: 360px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.85rem 2rem;
+      background: var(--gold-dark);
+      color: var(--ink);
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, gap 0.3s;
+    }
+
+    .btn:hover { background: var(--gold); gap: 1rem; }
+
+    .footer-note {
+      position: absolute;
+      bottom: 1.5rem;
+      font-size: 0.7rem;
+      color: rgba(201,168,92,0.25);
+      letter-spacing: 0.08em;
+    }
+
+    /* partícula de fundo */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(600px, 90vw);
+      height: min(600px, 90vw);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,92,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ornament"></div>
+
+  <p class="code">404</p>
+
+  <h1 class="title">Página <em>não encontrada</em></h1>
+
+  <p class="desc">
+    O passo que você procura não existe neste palco.<br>
+    Mas o espetáculo continua na página principal.
+  </p>
+
+  <a href="/" class="btn">Voltar ao início →</a>
+
+  <p class="footer-note">Soraya Magalla &nbsp;·&nbsp; Ordem do Templo de Ísis</p>
+
+</body>
+</html>
