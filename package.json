@@ -1,0 +1,24 @@
+{
+  "name": "ordemdo-templode-isis",
+  "version": "1.0.0",
+  "description": "Soraya Magalla - Bailarina, Coreógrafa e Professora de Egyptian Ballet, Danças Árabes e Flamenco",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaolinss-dev/OrdemdoTemplodeIsis.git"
+  },
+  "keywords": [
+    "dance",
+    "arabic-dance",
+    "egyptian-ballet",
+    "flamenco"
+  ],
+  "author": "João Lins",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joaolinss-dev/OrdemdoTemplodeIsis/issues"
+  },
+  "homepage": "https://github.com/joaolinss-dev/OrdemdoTemplodeIsis#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
