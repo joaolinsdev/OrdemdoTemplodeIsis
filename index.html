@@ -39,16 +39,7 @@
   <!-- Vercel Analytics -->
   <script defer src="/_vercel/insights/script.js"></script>
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GTCL911VLC"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B4Y4PEMJYT"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-GTCL911VLC');
-    gtag('config', 'G-B4Y4PEMJYT');
-  </script>
+  <!-- Google Analytics: carregado apenas após consentimento de cookies (LGPD) — ver banner no final do <body> -->
 
   <!-- Schema JSON-LD -->
   <script type="application/ld+json">
@@ -1891,9 +1882,9 @@
     <p style="text-align:center; margin-top:1.2rem; font-size:0.7rem; color:rgba(240,228,232,0.18); letter-spacing:0.08em;">Desenvolvido por <span style="color:rgba(200,175,130,0.45);">João Lins</span></p>
   </footer>
 
-  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js" integrity="sha384-O55L/6rhHr9CFvrxqv5luxOCcmVaBmETbZbJDP+Do8T0pztTACsFBD/IXCNkj7DV" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
@@ -2251,19 +2242,42 @@
       });
     }());
 
-    /* ── LGPD COOKIE BANNER ── */
+    /* ── LGPD COOKIE BANNER + GOOGLE ANALYTICS ── */
     (function () {
       const banner  = document.getElementById('cookie-banner');
       const accept  = document.getElementById('cookie-accept');
       const decline = document.getElementById('cookie-decline');
-      if (!localStorage.getItem('otiCookies')) {
+
+      /* Google Analytics só é carregado após consentimento (LGPD) */
+      function loadAnalytics() {
+        if (window.__gaLoaded) return;
+        window.__gaLoaded = true;
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-GTCL911VLC');
+        gtag('config', 'G-B4Y4PEMJYT');
+        ['G-GTCL911VLC', 'G-B4Y4PEMJYT'].forEach(id => {
+          const s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+          document.head.appendChild(s);
+        });
+      }
+
+      const consent = localStorage.getItem('otiCookies');
+      if (consent === 'accepted') {
+        loadAnalytics();
+      } else if (!consent) {
         setTimeout(() => banner.classList.add('visible'), 3800);
       }
+
       const dismiss = (choice) => {
         localStorage.setItem('otiCookies', choice);
         banner.classList.remove('visible');
       };
-      accept.addEventListener('click',  () => dismiss('accepted'));
+      accept.addEventListener('click',  () => { dismiss('accepted'); loadAnalytics(); });
       decline.addEventListener('click', () => dismiss('declined'));
     }());
 
