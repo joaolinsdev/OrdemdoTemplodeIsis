@@ -8,7 +8,11 @@
       "Bash(curl -sL https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js -o /tmp/gsap.min.js)",
       "Bash(curl -sL https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js -o /tmp/scrolltrigger.min.js)",
       "Bash(ls -la /tmp/*.js)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(rm -f /tmp/lenis.min.js /tmp/gsap.min.js /tmp/scrolltrigger.min.js)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
     ]
   }
 }
