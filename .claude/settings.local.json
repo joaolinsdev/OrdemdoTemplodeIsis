@@ -9,7 +9,11 @@
       "Bash(curl -sL https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js -o /tmp/scrolltrigger.min.js)",
       "Bash(ls -la /tmp/*.js)",
       "Read(//tmp/**)",
-      "Bash(rm -f /tmp/lenis.min.js /tmp/gsap.min.js /tmp/scrolltrigger.min.js)"
+      "Bash(rm -f /tmp/lenis.min.js /tmp/gsap.min.js /tmp/scrolltrigger.min.js)",
+      "Bash(nslookup otibrasil.com.br)",
+      "Bash(nslookup www.otibrasil.com.br)",
+      "Bash(openssl s_client -connect otibrasil.com.br:443 -servername otibrasil.com.br)",
+      "Bash(openssl x509 *)"
     ],
     "additionalDirectories": [
       "\\tmp"
