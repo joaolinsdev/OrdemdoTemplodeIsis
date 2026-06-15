@@ -13,7 +13,8 @@
       "Bash(nslookup otibrasil.com.br)",
       "Bash(nslookup www.otibrasil.com.br)",
       "Bash(openssl s_client -connect otibrasil.com.br:443 -servername otibrasil.com.br)",
-      "Bash(openssl x509 *)"
+      "Bash(openssl x509 *)",
+      "Bash(openssl s_client -connect www.otibrasil.com.br:443 -servername www.otibrasil.com.br)"
     ],
     "additionalDirectories": [
       "\\tmp"
