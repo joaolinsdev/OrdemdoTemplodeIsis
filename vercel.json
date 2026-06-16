@@ -1,10 +1,6 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/404.html", "status": 404 }
-  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -18,13 +14,13 @@
       ]
     },
     {
-      "source": "/(.+\\.(png|jpg|jpeg|gif|webp|svg|ico|woff2|woff|ttf))",
+      "source": "/(.+\\.(?:png|jpg|jpeg|gif|webp|svg|ico|woff2|woff|ttf))",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
       ]
     },
     {
-      "source": "/(index\\.html|404\\.html)",
+      "source": "/(?:index\\.html|404\\.html)",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
       ]
