@@ -4,29 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#c9a85c" />
-  <title>OTI Brasil</title>
+  <title>Soraya Magalla — Bailarina · Coreógrafa · Professora</title>
   <meta name="description" content="Soraya Magalla — pioneira da dança árabe no Nordeste do Brasil. Bailarina, coreógrafa e professora de Egyptian Ballet, Danças Árabes e Flamenco em Alagoas." />
   <meta name="author" content="Soraya Magalla" />
-
-  <meta name="keywords" content="OTI Brasil, Soraya Magalla, bailarina, coreógrafa, dança árabe, Egyptian Ballet, Flamenco, dança do ventre, Alagoas" />
-  <link rel="canonical" href="https://otibrasil.com.br/" />
 
   <!-- Open Graph (Facebook, Instagram, WhatsApp) -->
   <meta property="og:type"        content="website" />
   <meta property="og:locale"      content="pt_BR" />
-  <meta property="og:url"         content="https://otibrasil.com.br/" />
-  <meta property="og:title"       content="OTI Brasil | Soraya Magalla — Bailarina · Coreógrafa" />
+  <meta property="og:url"         content="https://ordemdo-templode-isis.vercel.app/" />
+  <meta property="og:title"       content="Soraya Magalla — Bailarina · Coreógrafa · Professora" />
   <meta property="og:description" content="Pioneira da dança árabe no Nordeste do Brasil. Décadas dedicadas ao Egyptian Ballet, Danças Árabes e Flamenco em Alagoas." />
-  <meta property="og:image"       content="https://otibrasil.com.br/Imagens%20Soraya%20Magalla/ChatGPT%20Image%2015%20de%20mai.%20de%202026%2C%2016_08_14.png" />
+  <meta property="og:image"       content="https://ordemdo-templode-isis.vercel.app/Imagens%20Soraya%20Magalla/ChatGPT%20Image%2015%20de%20mai.%20de%202026%2C%2016_08_14.png" />
   <meta property="og:image:width"  content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:site_name"   content="OTI Brasil" />
+  <meta property="og:site_name"   content="Soraya Magalla" />
 
   <!-- Twitter / X Card -->
   <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="OTI Brasil | Soraya Magalla — Bailarina · Coreógrafa" />
+  <meta name="twitter:title"       content="Soraya Magalla — Bailarina · Coreógrafa · Professora" />
   <meta name="twitter:description" content="Pioneira da dança árabe no Nordeste do Brasil. Egyptian Ballet, Danças Árabes e Flamenco em Alagoas." />
-  <meta name="twitter:image"       content="https://otibrasil.com.br/Imagens%20Soraya%20Magalla/ChatGPT%20Image%2015%20de%20mai.%20de%202026%2C%2016_08_14.png" />
+  <meta name="twitter:image"       content="https://ordemdo-templode-isis.vercel.app/Imagens%20Soraya%20Magalla/ChatGPT%20Image%2015%20de%20mai.%20de%202026%2C%2016_08_14.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,13 +36,8 @@
   <link rel="preload" as="image" href="Imagens%20Soraya%20Magalla/ChatGPT%20Image%2015%20de%20mai.%20de%202026%2C%2016_08_14.png" fetchpriority="high" />
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
-  <!-- Vercel Web Analytics -->
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
+  <!-- Vercel Analytics -->
   <script defer src="/_vercel/insights/script.js"></script>
-
-  <!-- Google Analytics: carregado apenas após consentimento de cookies (LGPD) — ver banner no final do <body> -->
 
   <!-- Schema JSON-LD -->
   <script type="application/ld+json">
@@ -1888,9 +1880,9 @@
     <p style="text-align:center; margin-top:1.2rem; font-size:0.7rem; color:rgba(240,228,232,0.18); letter-spacing:0.08em;">Desenvolvido por <span style="color:rgba(200,175,130,0.45);">João Lins</span></p>
   </footer>
 
-  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js" integrity="sha384-O55L/6rhHr9CFvrxqv5luxOCcmVaBmETbZbJDP+Do8T0pztTACsFBD/IXCNkj7DV" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
@@ -2248,42 +2240,19 @@
       });
     }());
 
-    /* ── LGPD COOKIE BANNER + GOOGLE ANALYTICS ── */
+    /* ── LGPD COOKIE BANNER ── */
     (function () {
       const banner  = document.getElementById('cookie-banner');
       const accept  = document.getElementById('cookie-accept');
       const decline = document.getElementById('cookie-decline');
-
-      /* Google Analytics só é carregado após consentimento (LGPD) */
-      function loadAnalytics() {
-        if (window.__gaLoaded) return;
-        window.__gaLoaded = true;
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        window.gtag = gtag;
-        gtag('js', new Date());
-        gtag('config', 'G-GTCL911VLC');
-        gtag('config', 'G-B4Y4PEMJYT');
-        ['G-GTCL911VLC', 'G-B4Y4PEMJYT'].forEach(id => {
-          const s = document.createElement('script');
-          s.async = true;
-          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
-          document.head.appendChild(s);
-        });
-      }
-
-      const consent = localStorage.getItem('otiCookies');
-      if (consent === 'accepted') {
-        loadAnalytics();
-      } else if (!consent) {
+      if (!localStorage.getItem('otiCookies')) {
         setTimeout(() => banner.classList.add('visible'), 3800);
       }
-
       const dismiss = (choice) => {
         localStorage.setItem('otiCookies', choice);
         banner.classList.remove('visible');
       };
-      accept.addEventListener('click',  () => { dismiss('accepted'); loadAnalytics(); });
+      accept.addEventListener('click',  () => dismiss('accepted'));
       decline.addEventListener('click', () => dismiss('declined'));
     }());
 
